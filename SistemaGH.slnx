@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="SistemaGH.Core/SistemaGH.Core.csproj" />
+  <Project Path="SistemaGH.Infrastructure/SistemaGH.Infrastructure.csproj" />
+  <Project Path="SistemaGH.Integrations.S3/SistemaGH.Integrations.S3.csproj" />
+  <Project Path="SistemaGH.Integrations.Siesa/SistemaGH.Integrations.Siesa.csproj" />
+  <Project Path="SistemaGH.Web/SistemaGH.Web.csproj" />
+</Solution>

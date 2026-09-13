@@ -1,0 +1,6 @@
+@SistemaGH.Web_HostAddress = http://localhost:5095
+
+GET {{SistemaGH.Web_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
