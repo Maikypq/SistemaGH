@@ -75,6 +75,22 @@ namespace SistemaGH.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Perfiles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Activo = true,
+                            Descripcion = "Perfil con acceso total al sistema",
+                            Nombre = "Administrador"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Activo = true,
+                            Descripcion = "Perfil operativo estándar",
+                            Nombre = "Operador"
+                        });
                 });
 
             modelBuilder.Entity("SistemaGH.Core.Entities.PerfilPermiso", b =>
@@ -90,6 +106,48 @@ namespace SistemaGH.Infrastructure.Migrations
                     b.HasIndex("PermisoId");
 
                     b.ToTable("PerfilPermisos");
+
+                    b.HasData(
+                        new
+                        {
+                            PerfilId = 1,
+                            PermisoId = 1
+                        },
+                        new
+                        {
+                            PerfilId = 1,
+                            PermisoId = 2
+                        },
+                        new
+                        {
+                            PerfilId = 1,
+                            PermisoId = 3
+                        },
+                        new
+                        {
+                            PerfilId = 1,
+                            PermisoId = 4
+                        },
+                        new
+                        {
+                            PerfilId = 1,
+                            PermisoId = 5
+                        },
+                        new
+                        {
+                            PerfilId = 1,
+                            PermisoId = 6
+                        },
+                        new
+                        {
+                            PerfilId = 1,
+                            PermisoId = 7
+                        },
+                        new
+                        {
+                            PerfilId = 1,
+                            PermisoId = 8
+                        });
                 });
 
             modelBuilder.Entity("SistemaGH.Core.Entities.Permiso", b =>
@@ -115,6 +173,64 @@ namespace SistemaGH.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Permisos");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Accion = "Ver Listado",
+                            CodigoSistema = "Usuarios.Ver",
+                            Modulo = "Usuarios"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Accion = "Crear Usuario",
+                            CodigoSistema = "Usuarios.Crear",
+                            Modulo = "Usuarios"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Accion = "Editar Usuario",
+                            CodigoSistema = "Usuarios.Editar",
+                            Modulo = "Usuarios"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Accion = "Eliminar Usuario",
+                            CodigoSistema = "Usuarios.Eliminar",
+                            Modulo = "Usuarios"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Accion = "Ver Perfiles",
+                            CodigoSistema = "Perfiles.Ver",
+                            Modulo = "Perfiles"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Accion = "Gestionar Permisos",
+                            CodigoSistema = "Perfiles.GestionarPermisos",
+                            Modulo = "Perfiles"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Accion = "Ver Empleados",
+                            CodigoSistema = "Empleados.Ver",
+                            Modulo = "Empleados"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Accion = "Crear Empleado",
+                            CodigoSistema = "Empleados.Crear",
+                            Modulo = "Empleados"
+                        });
                 });
 
             modelBuilder.Entity("SistemaGH.Core.Entities.Usuario", b =>
@@ -148,6 +264,17 @@ namespace SistemaGH.Infrastructure.Migrations
                     b.HasIndex("PerfilId");
 
                     b.ToTable("Usuarios");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Activo = true,
+                            Correo = "admin@sistemagh.com",
+                            NombreCompleto = "Administrador del Sistema",
+                            PasswordHash = "AQAAAAIAAYagAAAAEP2W9r5J7v8xZ3qL1mN6bV4cX5zQ8wE2rT1yU3iO4pA7sD6fG9hJ0kL2zX1cV3bN5m==",
+                            PerfilId = 1
+                        });
                 });
 
             modelBuilder.Entity("SistemaGH.Core.Entities.PerfilPermiso", b =>
