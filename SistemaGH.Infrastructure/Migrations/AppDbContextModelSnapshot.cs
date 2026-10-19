@@ -264,17 +264,6 @@ namespace SistemaGH.Infrastructure.Migrations
                     b.HasIndex("PerfilId");
 
                     b.ToTable("Usuarios");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Activo = true,
-                            Correo = "admin@sistemagh.com",
-                            NombreCompleto = "Administrador del Sistema",
-                            PasswordHash = "AQAAAAIAAYagAAAAEP2W9r5J7v8xZ3qL1mN6bV4cX5zQ8wE2rT1yU3iO4pA7sD6fG9hJ0kL2zX1cV3bN5m==",
-                            PerfilId = 1
-                        });
                 });
 
             modelBuilder.Entity("SistemaGH.Core.Entities.PerfilPermiso", b =>

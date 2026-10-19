@@ -1,6 +1,7 @@
+@model SistemaGH.Web.Models.LoginViewModel
 @{
-    ViewData["Title"] = "Iniciar Sesión";
-    Layout = null; 
+    Layout = null;
+    ViewData["Title"] = "Iniciar Sesión - SistemaGH";
 }
 
 <!DOCTYPE html>
@@ -8,75 +9,52 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login - SistemaGH</title>
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            background-color: #f3f4f6; 
-            margin: 0;
+        body {
+            background-color: #f4f6f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
-        .login-container { 
-            background: white; 
-            padding: 40px; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+        .login-card {
             width: 100%;
-            max-width: 350px; 
-            text-align: center;
+            max-width: 400px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            background: #ffffff;
         }
-        .login-container h2 { margin-bottom: 5px; color: #1f2937; }
-        .login-container p { color: #6b7280; margin-bottom: 25px; font-size: 14px; }
-        .form-group { margin-bottom: 15px; text-align: left; }
-        label { display: block; margin-bottom: 5px; font-weight: 600; color: #374151; font-size: 14px; }
-        input { 
-            width: 100%; 
-            padding: 10px; 
-            box-sizing: border-box; 
-            border: 1px solid #d1d5db; 
-            border-radius: 5px; 
-            font-size: 14px;
-        }
-        input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37,99,235,0.2); }
-        button { 
-            width: 100%; 
-            padding: 10px; 
-            background-color: #2563eb; 
-            color: white; 
-            border: none; 
-            border-radius: 5px; 
-            font-size: 16px; 
-            cursor: pointer; 
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        button:hover { background-color: #1d4ed8; }
-        .error-message { color: #dc2626; margin-bottom: 15px; font-size: 14px; font-weight: 600; }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>SistemaGH</h2>
-        <p>Gestión Humana La Meseta</p>
+    <div class="login-card">
+        <h3 class="text-center mb-4">SistemaGH</h3>
+        <p class="text-muted text-center mb-4">Ingresa tus credenciales</p>
 
-        @if (ViewBag.Error != null)
-        {
-            <div class="error-message">@ViewBag.Error</div>
-        }
+        <form asp-action="Login" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-        <form asp-controller="Auth" asp-action="Login" method="post">
-            <div class="form-group">
-                <label for="correo">Correo Electrónico</label>
-                <input type="email" id="correo" name="correo" placeholder="ejemplo@lameseta.com" required />
+            <div class="mb-3">
+                <label asp-for="Correo" class="form-label">Correo Electrónico</label>
+                <input asp-for="Correo" class="form-control" placeholder="admin@sistemagh.com" />
+                <span asp-validation-for="Correo" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label for="password">Contraseña</label>
-                <input type="password" id="password" name="password" placeholder="••••••••" required />
+
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label">Contraseña</label>
+                <input asp-for="Password" class="form-control" type="password" placeholder="••••••••" />
+                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-            <button type="submit">Ingresar</button>
+
+            <div class="mb-3 form-check">
+                <input asp-for="Recordarme" class="form-check-input" />
+                <label asp-for="Recordarme" class="form-check-label">Recordarme</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
         </form>
     </div>
 </body>

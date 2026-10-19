@@ -11,13 +11,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // servicio de Controladores y Vistas (MVC)
 builder.Services.AddControllersWithViews();
 
-// Autenticación por Cookies
+// cookies
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Auth/Login"; // A dónde lo manda si no tiene sesión
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Tiempo de inactividad
+        options.LoginPath = "/Auth/Login"; 
+        options.LogoutPath = "/Auth/Logout";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30); 
         options.AccessDeniedPath = "/Auth/AccesoDenegado";
+        options.SlidingExpiration = true;
     });
 
 var app = builder.Build();

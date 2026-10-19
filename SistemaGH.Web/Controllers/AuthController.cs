@@ -1,61 +1,106 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
+using SistemaGH.Core.Entities;
+using SistemaGH.Infrastructure.Data;
+using SistemaGH.Web.Models;
 
 namespace SistemaGH.Web.Controllers
 {
     public class AuthController : Controller
     {
-        // GET: Muestra la pantalla de login
-        [HttpGet]
-        public IActionResult Login()
+        private readonly AppDbContext _context;
+
+        public AuthController(AppDbContext context)
         {
-            // Si ya tiene sesión, mandarlo al inicio para que no vuelva a ver el login
-            if (User.Identity != null && User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            _context = context;
+        }
+
+        [HttpGet]
+        public IActionResult Login(string? returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
 
-        // POST: Recibe los datos del formulario
         [HttpPost]
-        public async Task<IActionResult> Login(string correo, string password)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
         {
-            // TODO: Aquí llamaremos a la base de datos más adelante. 
-            // Por ahora simulamos que el login es exitoso si escribe esto:
-            if (correo == "admin@lameseta.com" && password == "1234")
+            ViewData["ReturnUrl"] = returnUrl;
+
+            if (!ModelState.IsValid)
             {
-                // 1. Crear los "Claims" (Datos del usuario que guardará la Cookie)
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, correo),
-                    new Claim(ClaimTypes.Role, "Administrador")
-                };
-
-                // 2. Crear la identidad y el principal
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-
-                // 3. Generar la Cookie de sesión
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
-
-                // 4. Redirigir a la pantalla principal
-                return RedirectToAction("Index", "Home");
+                return View(model);
             }
 
-            // Si falla, recargar la vista con un error
-            ViewBag.Error = "Correo o contraseña incorrectos.";
-            return View();
+            // 1. Buscar usuario por correo incluyendo su Perfil
+            var usuario = await _context.Usuarios
+                .Include(u => u.Perfil)
+                .FirstOrDefaultAsync(u => u.Correo == model.Correo);
+
+            if (usuario == null || !usuario.Activo)
+            {
+                ModelState.AddModelError(string.Empty, "Credenciales inválidas o cuenta inactiva.");
+                return View(model);
+            }
+
+            // 2. Validar contraseña usando PasswordHasher
+            var hasher = new PasswordHasher<Usuario>();
+            var verificationResult = hasher.VerifyHashedPassword(usuario, usuario.PasswordHash, model.Password);
+
+            if (verificationResult == PasswordVerificationResult.Failed)
+            {
+                ModelState.AddModelError(string.Empty, "Credenciales inválidas.");
+                return View(model);
+            }
+
+            // 3. Crear los Claims del usuario para la Cookie
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
+                new Claim(ClaimTypes.Name, usuario.NombreCompleto),
+                new Claim(ClaimTypes.Email, usuario.Correo),
+                new Claim("PerfilId", usuario.PerfilId.ToString()),
+                new Claim(ClaimTypes.Role, usuario.Perfil?.Nombre ?? "SinPerfil")
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var authProperties = new AuthenticationProperties
+            {
+                IsPersistent = model.Recordarme,
+                ExpiresUtc = DateTimeOffset.UtcNow.AddHours(8)
+            };
+
+            // 4. Iniciar sesión guardando la cookie
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties);
+
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
-        // GET: Cerrar sesión
-        [HttpGet]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Auth");
+        }
+
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }

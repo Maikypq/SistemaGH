@@ -27,7 +27,9 @@
                                 <span class="nav-link text-dark fw-bold me-3">Hola, @User.Identity.Name</span>
                             </li>
                             <li class="nav-item">
-                                <a class="btn btn-outline-danger btn-sm mt-1" asp-controller="Auth" asp-action="Logout">Cerrar Sesión</a>
+                                <form asp-controller="Auth" asp-action="Logout" method="post" class="form-inline">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm mt-1">Cerrar Sesión</button>
+                                </form>
                             </li>
                         }
                     </ul>

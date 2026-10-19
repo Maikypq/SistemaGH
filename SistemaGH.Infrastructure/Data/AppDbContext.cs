@@ -61,24 +61,6 @@ namespace SistemaGH.Infrastructure.Data
             }
             modelBuilder.Entity<PerfilPermiso>().HasData(perfilPermisosSeed);
 
-            // ==========================================
-            // 4. SEEDING DE USUARIO ADMINISTRADOR INICIAL
-            // ==========================================
-            var hasher = new PasswordHasher<Usuario>();
-            var passwordHash = hasher.HashPassword(null!, "Admin123*");
-
-            modelBuilder.Entity<Usuario>().HasData(
-                new Usuario
-                {
-                   Id = 1,
-                    NombreCompleto = "Administrador del Sistema",
-                    Correo = "admin@sistemagh.com",
-                    // Usamos un hash estático fijo para "Admin123*" para evitar cambios dinámicos en el modelo
-                    PasswordHash = "AQAAAAIAAYagAAAAEP2W9r5J7v8xZ3qL1mN6bV4cX5zQ8wE2rT1yU3iO4pA7sD6fG9hJ0kL2zX1cV3bN5m==",
-                    Activo = true,
-                    PerfilId = 1
-                }
-            );
         }
     }
 }
