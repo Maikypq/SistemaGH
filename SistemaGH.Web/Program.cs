@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SistemaGH.Core.Entities;
 using SistemaGH.Infrastructure.Data;
+using SistemaGH.Core.Interfaces;
+using SistemaGH.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,8 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// servicio de Controladores y Vistas (MVC)
+// Registro de servicios y repositorios (Arquitectura Limpia)
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IEmpleadoRepository, EmpleadoRepository>(); 
 
 // cookies
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -48,11 +51,16 @@ using (var scope = app.Services.CreateScope())
         // 2. Lista base de Permisos del sistema adaptada a tu modelo
         var permisosBase = new List<(string CodigoSistema, string Modulo, string Accion)>
         {
-            ("Usuarios.Ver", "Usuarios", "Ver"),
+           ("Usuarios.Ver", "Usuarios", "Ver"),
             ("Usuarios.Crear", "Usuarios", "Crear"),
             ("Usuarios.Editar", "Usuarios", "Editar"),
             ("Usuarios.Eliminar", "Usuarios", "Eliminar"),
-            ("Permisos.Gestionar", "Permisos", "Gestionar")
+            ("Permisos.Gestionar", "Permisos", "Gestionar"),
+            // Empleados ---
+            ("Empleados.Ver", "Empleados", "Ver"),
+            ("Empleados.Crear", "Empleados", "Crear"),
+            ("Empleados.Editar", "Empleados", "Editar"),
+            ("Empleados.Eliminar", "Empleados", "Eliminar")
         };
 
         foreach (var p in permisosBase)
