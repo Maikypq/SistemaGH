@@ -9,7 +9,7 @@ namespace SistemaGH.Infrastructure.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
-
+        public DbSet<AuditoriaLog> AuditoriaLogs { get; set; }
         public DbSet<Empleado> Empleados { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Perfil> Perfiles { get; set; }

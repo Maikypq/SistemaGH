@@ -21,7 +21,7 @@ namespace SistemaGH.Web.Controllers
             var perfiles = await _context.Perfiles.ToListAsync();
             return View(perfiles);
         }
-        
+
         [HttpGet]
         [RequirePermission("Permisos.Gestionar")]
         public async Task<IActionResult> AsignarPermisos(int perfilId)
@@ -84,9 +84,30 @@ namespace SistemaGH.Web.Controllers
                 }
             }
 
+            // === OBTENER LOS NOMBRES DE LOS PERMISOS PARA EL DETALLE ===
+            var nombresPermisos = await _context.Permisos
+                .Where(p => permisosSeleccionados != null && permisosSeleccionados.Contains(p.Id))
+                .Select(p => p.Accion) // O p.CodigoSistema, como prefieras mostrarlo
+                .ToListAsync();
+
+            string detallePermisos = nombresPermisos.Any() 
+                ? string.Join(", ", nombresPermisos) 
+                : "Ninguno";
+            // ============================================================
+
+            // REGISTRO DE AUDITORÍA DETALLADO
+            _context.AuditoriaLogs.Add(new AuditoriaLog
+            {
+                Usuario = User.Identity?.Name ?? "Sistema",
+                Accion = "Actualización de Permisos",
+                Modulo = "Perfiles",
+                Fecha = DateTime.Now,
+                Detalles = $"Perfil '{perfil.Nombre}' actualizado. Permisos activos: [{detallePermisos}]"
+            });
+
             await _context.SaveChangesAsync();
             TempData["Mensaje"] = "Los permisos han sido actualizados exitosamente.";
-            return RedirectToAction("Index"); // O a tu vista de listado de perfiles
+            return RedirectToAction("Index");
         }
     }
 }
