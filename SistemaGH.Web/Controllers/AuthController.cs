@@ -74,6 +74,17 @@ namespace SistemaGH.Web.Controllers
                 IsPersistent = model.Recordarme,
                 ExpiresUtc = DateTimeOffset.UtcNow.AddHours(8)
             };
+            
+            // Registrar inicio de sesión en Auditoría
+                _context.AuditoriaLogs.Add(new AuditoriaLog
+            {
+                    Usuario = usuario.NombreCompleto,
+                    Accion = "Inicio de Sesión",
+                    Modulo = "Autenticación",
+                    Fecha = DateTime.Now,
+                    Detalles = $"El usuario {usuario.Correo} inició sesión con el perfil '{usuario.Perfil?.Nombre}'."
+            });
+            await _context.SaveChangesAsync();
 
             // 4. Iniciar sesión guardando la cookie
             await HttpContext.SignInAsync(

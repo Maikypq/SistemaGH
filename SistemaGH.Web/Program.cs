@@ -14,7 +14,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Registro de servicios y repositorios (Arquitectura Limpia)
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IEmpleadoRepository, EmpleadoRepository>(); 
+builder.Services.AddScoped<IEmpleadoRepository, EmpleadoRepository>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 // cookies
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
