@@ -9,13 +9,17 @@ using SistemaGH.Infrastructure.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Registrar el AppDbContext para la base de datos con SQL Server
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Registro de servicios y repositorios (Arquitectura Limpia)
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IEmpleadoRepository, EmpleadoRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IAuditoriaRepository, AuditoriaRepository>(); 
+builder.Services.AddScoped<IPerfilRepository, PerfilRepository>();  
 
 // cookies
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

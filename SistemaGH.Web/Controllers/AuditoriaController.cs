@@ -1,28 +1,25 @@
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SistemaGH.Infrastructure.Data;
+using SistemaGH.Core.Interfaces;
 using SistemaGH.Web.Filters;
 
 namespace SistemaGH.Web.Controllers
 {
+    [Authorize]
     public class AuditoriaController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAuditoriaRepository _auditoriaRepository;
 
-        public AuditoriaController(AppDbContext context)
+        public AuditoriaController(IAuditoriaRepository auditoriaRepository)
         {
-            _context = context;
+            _auditoriaRepository = auditoriaRepository;
         }
 
-        [HttpGet]
-        [RequirePermission("Permisos.Gestionar")] // O el permiso que queramos restringir
+        [RequirePermission("Permisos.Gestionar")]
         public async Task<IActionResult> Index()
         {
-            var logs = await _context.AuditoriaLogs
-                .OrderByDescending(l => l.Fecha)
-                .Take(100) // Mostramos los últimos 100 eventos
-                .ToListAsync();
-
+            var logs = await _auditoriaRepository.ObtenerTodosAsync();
             return View(logs);
         }
     }

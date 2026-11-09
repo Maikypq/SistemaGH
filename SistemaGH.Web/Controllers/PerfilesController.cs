@@ -1,24 +1,29 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SistemaGH.Core.Entities;
-using SistemaGH.Infrastructure.Data;
+using SistemaGH.Core.Interfaces;
 using SistemaGH.Web.Filters;
 using SistemaGH.Web.Models;
 
 namespace SistemaGH.Web.Controllers
 {
+    [Authorize]
     public class PerfilesController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IPerfilRepository _perfilRepository;
 
-        public PerfilesController(AppDbContext context)
+        public PerfilesController(IPerfilRepository perfilRepository)
         {
-            _context = context;
+            _perfilRepository = perfilRepository;
         }
+
         [HttpGet]
+        [RequirePermission("Permisos.Gestionar")]
         public async Task<IActionResult> Index()
         {
-            var perfiles = await _context.Perfiles.ToListAsync();
+            var perfiles = await _perfilRepository.ObtenerTodosAsync();
             return View(perfiles);
         }
 
@@ -26,14 +31,13 @@ namespace SistemaGH.Web.Controllers
         [RequirePermission("Permisos.Gestionar")]
         public async Task<IActionResult> AsignarPermisos(int perfilId)
         {
-            var perfil = await _context.Perfiles.FindAsync(perfilId);
+            var perfil = await _perfilRepository.ObtenerPorIdConPermisosAsync(perfilId);
             if (perfil == null) return NotFound();
 
-            var todosLosPermisos = await _context.Permisos.ToListAsync();
-            var permisosDelPerfil = await _context.PerfilPermisos
-                .Where(pp => pp.PerfilId == perfilId)
+            var todosLosPermisos = await _perfilRepository.ObtenerTodosLosPermisosAsync();
+            var permisosDelPerfil = perfil.PerfilPermisos
                 .Select(pp => pp.PermisoId)
-                .ToListAsync();
+                .ToList();
 
             var viewModel = new AsignarPermisosViewModel
             {
@@ -62,52 +66,14 @@ namespace SistemaGH.Web.Controllers
         [RequirePermission("Permisos.Gestionar")]
         public async Task<IActionResult> AsignarPermisos(int perfilId, List<int> permisosSeleccionados)
         {
-            var perfil = await _context.Perfiles
-                .Include(p => p.PerfilPermisos)
-                .FirstOrDefaultAsync(p => p.Id == perfilId);
-
+            var perfil = await _perfilRepository.ObtenerPorIdConPermisosAsync(perfilId);
             if (perfil == null) return NotFound();
 
-            // Limpiar los permisos actuales del perfil
-            _context.PerfilPermisos.RemoveRange(perfil.PerfilPermisos);
+            var usuarioActual = User.Identity?.Name ?? "Administrador del Sistema";
+            await _perfilRepository.ActualizarPermisosAsync(perfilId, permisosSeleccionados, usuarioActual);
 
-            // Asignar los nuevos permisos marcados
-            if (permisosSeleccionados != null && permisosSeleccionados.Any())
-            {
-                foreach (var permisoId in permisosSeleccionados)
-                {
-                    _context.PerfilPermisos.Add(new PerfilPermiso
-                    {
-                        PerfilId = perfilId,
-                        PermisoId = permisoId
-                    });
-                }
-            }
-
-            // === OBTENER LOS NOMBRES DE LOS PERMISOS PARA EL DETALLE ===
-            var nombresPermisos = await _context.Permisos
-                .Where(p => permisosSeleccionados != null && permisosSeleccionados.Contains(p.Id))
-                .Select(p => p.Accion) // O p.CodigoSistema, como prefieras mostrarlo
-                .ToListAsync();
-
-            string detallePermisos = nombresPermisos.Any() 
-                ? string.Join(", ", nombresPermisos) 
-                : "Ninguno";
-            // ============================================================
-
-            // REGISTRO DE AUDITORÍA DETALLADO
-            _context.AuditoriaLogs.Add(new AuditoriaLog
-            {
-                Usuario = User.Identity?.Name ?? "Sistema",
-                Accion = "Actualización de Permisos",
-                Modulo = "Perfiles",
-                Fecha = DateTime.Now,
-                Detalles = $"Perfil '{perfil.Nombre}' actualizado. Permisos activos: [{detallePermisos}]"
-            });
-
-            await _context.SaveChangesAsync();
             TempData["Mensaje"] = "Los permisos han sido actualizados exitosamente.";
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
     }
 }
