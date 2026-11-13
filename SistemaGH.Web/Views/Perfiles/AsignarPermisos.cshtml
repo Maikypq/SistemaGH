@@ -1,51 +1,45 @@
 @model SistemaGH.Web.Models.AsignarPermisosViewModel
 
 @{
-    ViewData["Title"] = "Gestión de Permisos";
+    ViewData["Title"] = "Asignar Permisos";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Asignar Permisos al Perfil: <span class="text-primary">@Model.NombrePerfil</span></h2>
-        <a asp-action="Index" class="btn btn-outline-secondary">Volver</a>
-    </div>
-    <hr />
-
-    @if (TempData["Mensaje"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            @TempData["Mensaje"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<div class="bento-dashboard-wrapper p-4 p-lg-5">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <span class="badge rounded-pill bg-warning text-dark fw-bold px-3 py-1 mb-2">Matriz de Seguridad</span>
+            <h1 class="bento-main-title mb-0" style="font-size: 2.2rem;">Permisos del Perfil: @Model.NombrePerfil</h1>
         </div>
-    }
+        <a asp-action="Index" class="bento-filter-pill outline">← Volver a Perfiles</a>
+    </div>
 
     <form asp-action="AsignarPermisos" method="post">
         <input type="hidden" name="perfilId" value="@Model.PerfilId" />
 
-        <div class="row">
-            @foreach (var modulo in Model.Modulos)
+        <div class="row g-4">
+            @foreach (var grupo in Model.Modulos)
             {
-                <div class="col-md-6 mb-4">
-                    <div class="card shadow-sm border-0 h-100">
-                        <div class="card-header bg-dark text-white fw-bold">
-                            📂 Módulo: @modulo.Modulo
+                <div class="col-md-6 col-lg-4">
+                    <div class="bento-card h-100">
+                        <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
+                            <h5 class="fw-bold text-dark mb-0">📦 Módulo @grupo.Modulo</h5>
+                            <span class="bento-tag">@grupo.Permisos.Count acciones</span>
                         </div>
-                        <div class="card-body">
-                            @foreach (var permiso in modulo.Permisos)
+
+                        <div class="d-flex flex-column gap-2">
+                            @foreach (var permiso in grupo.Permisos)
                             {
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" 
-                                           name="permisosSeleccionados" 
-                                           value="@permiso.PermisoId" 
-                                           id="permiso_@permiso.PermisoId"
+                                <label class="bento-subcard p-3 d-flex align-items-center justify-content-between" style="cursor: pointer;">
+                                    <div>
+                                        <div class="fw-bold text-dark">@permiso.Accion</div>
+                                        <small class="text-muted">@permiso.CodigoSistema</small>
+                                    </div>
+                                    <input class="form-check-input fs-5 m-0"
+                                           type="checkbox"
+                                           name="permisosSeleccionados"
+                                           value="@permiso.PermisoId"
                                            @(permiso.Seleccionado ? "checked" : "") />
-                                           
-                                    <label class="form-check-label" for="permiso_@permiso.PermisoId">
-                                        <strong>@permiso.CodigoSistema</strong> 
-                                        <br />
-                                        <small class="text-muted">@permiso.Accion</small>
-                                    </label>
-                                </div>
+                                </label>
                             }
                         </div>
                     </div>
@@ -53,9 +47,11 @@
             }
         </div>
 
-        <div class="mt-3 mb-5">
-            <button type="submit" class="btn btn-success btn-lg">Guardar Cambios</button>
-            <a asp-action="Index" class="btn btn-secondary btn-lg">Cancelar</a>
+        <div class="d-flex justify-content-end gap-3 mt-4">
+            <a asp-action="Index" class="btn btn-light rounded-pill px-4 py-2 fw-semibold">Cancelar</a>
+            <button type="submit" class="btn btn-gold-solid rounded-pill px-5 py-2 fw-bold">
+                ✓ Guardar Matriz de Permisos
+            </button>
         </div>
     </form>
 </div>

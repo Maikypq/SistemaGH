@@ -4,35 +4,42 @@
     ViewData["Title"] = "Eliminar Usuario";
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card border-danger shadow-sm">
-                <div class="card-header bg-danger text-white">
-                    <h4 class="mb-0">Confirmar Eliminación</h4>
+<div class="row justify-content-center py-4">
+    <div class="col-md-7 col-lg-5">
+        <div class="bento-form-card p-4 p-md-5">
+            <div class="text-center mb-4">
+                <div class="bento-avatar-box mx-auto mb-3" style="background: linear-gradient(145deg, #dc2626, #991b1b);">⚠️</div>
+                <span class="badge rounded-pill bg-danger-subtle text-danger fw-bold px-3 py-1 mb-2">Revocación de Acceso</span>
+                <h3 class="fw-bold text-dark mb-1">¿Eliminar Usuario?</h3>
+                <p class="text-muted small mb-0">Se revocará permanentemente el acceso de esta cuenta.</p>
+            </div>
+
+            <div class="bento-subcard p-3 mb-4">
+                <div class="bento-detail-item">
+                    <span class="text-muted">Nombre</span>
+                    <span class="fw-bold text-dark">@Model.NombreCompleto</span>
                 </div>
-                <div class="card-body">
-                    <p class="lead">¿Estás seguro de que deseas eliminar este usuario del sistema?</p>
-                    <dl class="row">
-                        <dt class="col-sm-4">Nombre:</dt>
-                        <dd class="col-sm-8">@Model.NombreCompleto</dd>
-
-                        <dt class="col-sm-4">Correo:</dt>
-                        <dd class="col-sm-8">@Model.Correo</dd>
-
-                        <dt class="col-sm-4">Perfil:</dt>
-                        <dd class="col-sm-8">@Model.Perfil?.Nombre</dd>
-                    </dl>
-
-                    <form asp-action="Eliminar" method="post">
-                        <input type="hidden" asp-for="Id" />
-                        <div class="d-flex justify-content-between mt-4">
-                            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-                            <button type="submit" class="btn btn-danger">Confirmar Eliminación</button>
-                        </div>
-                    </form>
+                <div class="bento-detail-item">
+                    <span class="text-muted">Correo</span>
+                    <span class="fw-bold text-dark">@Model.Correo</span>
+                </div>
+                <div class="bento-detail-item border-0">
+                    <span class="text-muted">Perfil</span>
+                    <span class="fw-bold text-dark">@Model.Perfil?.Nombre</span>
                 </div>
             </div>
+
+            <form asp-action="Eliminar" method="post">
+                <input type="hidden" asp-for="Id" />
+                <div class="d-flex justify-content-between gap-3">
+                    <a asp-action="Index" class="btn btn-light rounded-pill px-4 py-2 fw-semibold border w-50">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-danger rounded-pill px-4 py-2 fw-bold w-50 shadow-sm">
+                        Eliminar Cuenta
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

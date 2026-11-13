@@ -1,69 +1,313 @@
-﻿@{
-    ViewData["Title"] = "Inicio";
+﻿@using SistemaGH.Core.Entities
+@{
+    ViewData["Title"] = "Estadísticas";
+    var destacado = ViewBag.UsuarioDestacado as Usuario;
+    var segundo = ViewBag.SegundoUsuario as Usuario;
+    var ultimosLogs = ViewBag.UltimosLogs as List<AuditoriaLog> ?? new List<AuditoriaLog>();
+
+    int totalEmpleados = ViewBag.TotalEmpleados ?? 0;
+    int totalUsuarios = ViewBag.TotalUsuarios ?? 0;
+    int usuariosActivos = ViewBag.UsuariosActivos ?? 0;
+    int totalPerfiles = ViewBag.TotalPerfiles ?? 0;
+    int totalEventos = ViewBag.TotalEventos ?? 0;
+    int porcentaje = ViewBag.PorcentajeSalud ?? 100;
+
+    int iniciales1 = destacado != null && !string.IsNullOrEmpty(destacado.NombreCompleto) ? 1 : 0;
+    string siglas = iniciales1 == 1
+        ? string.Concat(destacado!.NombreCompleto.Split(' ', StringSplitOptions.RemoveEmptyEntries).Take(2).Select(s => s[0])).ToUpper()
+        : "LM";
 }
 
-<div class="container mt-5">
-    <div class="text-center mb-5">
-        <h1 class="display-4 fw-bold text-primary">Bienvenido a SistemaGH</h1>
-        <p class="lead text-muted">Plataforma central de Gestión Humana - Compañía Cafetera La Meseta S.A.</p>
+<div class="bento-dashboard-wrapper p-4 p-lg-5">
+    <!-- CABECERA ESTILO "YOUR STATISTICS" -->
+    <div class="row align-items-end mb-4 gy-3">
+        <div class="col-lg-6">
+            <h1 class="bento-main-title mb-3">Estadísticas GH</h1>
+            <div class="d-flex flex-wrap gap-2">
+                <a asp-controller="Home" asp-action="Index" class="bento-filter-pill active">Panel General</a>
+                <a asp-controller="Auditoria" asp-action="Index" class="bento-filter-pill dark">Analítica y Auditoría</a>
+                <a asp-controller="Empleados" asp-action="Crear" class="bento-filter-pill outline">+ Nuevo Empleado</a>
+            </div>
+        </div>
+
+        <!-- KPIs Superiores Derechos con Círculo Blanco -->
+        <div class="col-lg-6 d-flex justify-content-lg-end flex-wrap gap-4">
+            <div class="d-flex align-items-center gap-3">
+                <div class="bento-White-circle">👥</div>
+                <div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="bento-top-metric">@totalEmpleados</span>
+                        <span class="badge rounded-pill bg-warning text-dark fw-bold">+100%</span>
+                    </div>
+                    <small class="text-white-50">Colaboradores en Nómina</small>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center gap-3">
+                <div class="bento-White-circle">⚡</div>
+                <div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="bento-top-metric">@totalEventos</span>
+                        <span class="text-white-50 small">logs</span>
+                    </div>
+                    <small class="text-white-50">Movimientos Auditados</small>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="row g-4 justify-content-center">
-        <!-- Tarjeta Empleados -->
-        <div class="col-md-6 col-lg-3">
-            <div class="card h-100 shadow-sm border-0 text-center p-3">
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <div>
-                        <h4 class="card-title text-primary fw-bold mb-3">👥 Empleados</h4>
-                        <p class="card-text text-muted">Gestión del personal y colaboradores activos de la compañía.</p>
+    <!-- GRILLA CENTRAL BENTO (3 COLUMNAS COMO LA IMAGEN DE REFERENCIA) -->
+    <div class="row g-4">
+        <!-- COLUMNA 1: EQUIPO Y CONTROL DE ACCESO (Team Spotlight) -->
+        <div class="col-lg-4">
+            <div class="bento-card h-100 d-flex flex-column justify-content-between p-4">
+                <div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="fw-bold text-dark mb-0">Control de Equipo</h6>
+                        <a asp-controller="Usuarios" asp-action="Index" class="bento-icon-btn" title="Ver Usuarios">⋯</a>
                     </div>
-                    <div class="mt-3">
-                        <a asp-controller="Empleados" asp-action="Index" class="btn btn-outline-primary w-100">Gestionar Empleados</a>
+
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <div class="bento-avatar-box">@siglas</div>
+                        <div>
+                            <h5 class="fw-bold text-dark mb-0">@(destacado?.NombreCompleto ?? "Administrador Inicial")</h5>
+                            <small class="text-muted">@(destacado?.Perfil?.Nombre ?? "Administrador")</small>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <small class="text-muted fw-semibold">Información Detallada</small>
+                        <div class="d-flex gap-1">
+                            <a asp-controller="Empleados" asp-action="Index" class="bento-mini-circle">←</a>
+                            <a asp-controller="Usuarios" asp-action="Crear" class="bento-mini-circle dark">+</a>
+                        </div>
+                    </div>
+
+                    <div class="bento-detail-list mb-3">
+                        <div class="bento-detail-item">
+                            <span class="text-muted">🏢 Sede Principal</span>
+                            <span class="fw-bold text-dark">La Meseta (HQ)</span>
+                        </div>
+                        <div class="bento-detail-item">
+                            <span class="text-muted">✉️ Correo</span>
+                            <span class="fw-bold text-dark">@(destacado?.Correo ?? "admin@lameseta.com")</span>
+                        </div>
+                        <div class="bento-detail-item">
+                            <span class="text-muted">👥 Empleados Registrados</span>
+                            <span class="fw-bold text-dark">@totalEmpleados</span>
+                        </div>
+                        <div class="bento-detail-item">
+                            <span class="text-muted">🛡️ Perfiles Activos</span>
+                            <span class="fw-bold text-dark">@totalPerfiles</span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-1 mb-3">
+                        <a asp-controller="Empleados" asp-action="Index" class="bento-tag active">Todos</a>
+                        <a asp-controller="Usuarios" asp-action="Index" class="bento-tag">Usuarios (@totalUsuarios)</a>
+                        <a asp-controller="Perfiles" asp-action="Index" class="bento-tag">Perfiles (@totalPerfiles)</a>
+                    </div>
+                </div>
+
+                <!-- Tarjeta inferior de progreso -->
+                <div class="bento-subcard p-3 mt-2">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="bento-avatar-sm">GH</span>
+                            <span class="fw-bold small text-dark">@(segundo?.NombreCompleto ?? "Gestión Humana")</span>
+                        </div>
+                        <span class="badge bg-success-subtle text-success rounded-pill">Activo</span>
+                    </div>
+                    <div class="d-flex justify-content-between small text-muted mb-1">
+                        <span>Cobertura de cuentas activas</span>
+                        <span class="fw-bold text-dark">@porcentaje%</span>
+                    </div>
+                    <div class="progress" style="height: 6px; border-radius: 10px;">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: @porcentaje%"></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Tarjeta Usuarios -->
-        <div class="col-md-6 col-lg-3">
-            <div class="card h-100 shadow-sm border-0 text-center p-3">
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <div>
-                        <h4 class="card-title text-primary fw-bold mb-3">🔐 Usuarios</h4>
-                        <p class="card-text text-muted">Administración de cuentas de acceso, estados y credenciales.</p>
+        <!-- COLUMNA 2: RENDIMIENTO (ARRIBA) + TUS REPORTES/MÓDULOS (ABAJO) -->
+        <div class="col-lg-4 d-flex flex-column gap-4">
+            <!-- Tarjeta Medidor Semicircular (Performance) -->
+            <div class="bento-card p-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6 class="fw-bold text-dark mb-0">Rendimiento Operativo</h6>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="small fw-bold text-success">+@usuariosActivos Activos</span>
+                        <a asp-controller="Empleados" asp-action="Index" class="bento-mini-circle dark">↗</a>
                     </div>
-                    <div class="mt-3">
-                        <a asp-controller="Usuarios" asp-action="Index" class="btn btn-outline-primary w-100">Gestionar Usuarios</a>
+                </div>
+
+                <!-- Medidor Semicircular Segmentado -->
+                <div class="gauge-container my-3 text-center">
+                    <div class="semi-gauge">
+                        <div class="semi-gauge-fill" style="--gauge-value: @porcentaje;"></div>
+                        <div class="semi-gauge-cover">
+                            <span class="gauge-number">@porcentaje%</span>
+                            <small class="text-muted d-block">Seguridad Activa</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bento-target-pill text-center py-2 px-3">
+                    🟢 @usuariosActivos de @totalUsuarios cuentas habilitadas • @totalEmpleados empleados
+                </div>
+            </div>
+
+            <!-- Tarjeta Oscura (Your Reports / Accesos Rápidos) -->
+            <div class="bento-card-dark p-4 flex-grow-1 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h3 class="fw-bold text-white mb-0">Módulos y<br />Reportes</h3>
+                        <span class="bento-dark-badge">4 Módulos</span>
+                    </div>
+                    <p class="text-white-50 small mb-3">Acceso directo a operaciones y auditoría en tiempo real</p>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                    <div class="d-flex gap-2">
+                        <a asp-controller="Empleados" asp-action="Index" class="bento-action-circle light" title="Ir a Empleados">👥</a>
+                        <a asp-controller="Perfiles" asp-action="Index" class="bento-action-circle outline" title="Ir a Perfiles">🛡️</a>
+                        <a asp-controller="Auditoria" asp-action="Index" class="bento-action-circle outline" title="Ver Auditoría">↗</a>
+                    </div>
+                    <div class="bento-dots">
+                        <span class="active"></span><span></span><span></span><span></span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Tarjeta Perfiles y Permisos -->
-        <div class="col-md-6 col-lg-3">
-            <div class="card h-100 shadow-sm border-0 text-center p-3">
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <div>
-                        <h4 class="card-title text-primary fw-bold mb-3">🛡️ Perfiles</h4>
-                        <p class="card-text text-muted">Configuración de roles y asignación de permisos por módulo.</p>
+        <!-- COLUMNA 3: ANALÍTICA Y BARRAS VERTICALES (Analytics) -->
+        <div class="col-lg-4">
+            <div class="bento-card h-100 p-4 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="fw-bold text-dark mb-0">Analítica del Sistema</h6>
+                        <span class="bento-tag">Tiempo Real</span>
                     </div>
-                    <div class="mt-3">
-                        <a asp-controller="Perfiles" asp-action="Index" class="btn btn-outline-primary w-100">Gestionar Perfiles</a>
+
+                    <div class="d-flex flex-wrap gap-1 mb-3">
+                        <a asp-controller="Empleados" asp-action="Index" class="bento-tag active">Empleados</a>
+                        <a asp-controller="Usuarios" asp-action="Index" class="bento-tag">Usuarios</a>
+                        <a asp-controller="Perfiles" asp-action="Index" class="bento-tag">Perfiles</a>
+                        <a asp-controller="Auditoria" asp-action="Index" class="bento-tag">Auditoría</a>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <span class="status-dot-green"></span>
+                        <span class="fw-bold small text-dark">Volumen por Módulo</span>
+                        <span class="badge bg-light text-secondary border">SQL Server</span>
+                    </div>
+
+                    <!-- Gráfico de cápsulas verticales estilo Code XR -->
+                    <div class="bento-bars-chart my-3">
+                        <div class="bento-bar-col">
+                            <div class="bento-bar-track">
+                                <div class="bento-bar-fill striped" style="height: @(Math.Clamp(totalEmpleados * 15 + 25, 25, 100))%;"></div>
+                            </div>
+                            <small>Emp</small>
+                        </div>
+                        <div class="bento-bar-col">
+                            <div class="bento-bar-track">
+                                <div class="bento-bar-fill striped" style="height: @(Math.Clamp(totalUsuarios * 18 + 30, 30, 100))%;"></div>
+                            </div>
+                            <small>Usu</small>
+                        </div>
+                        <div class="bento-bar-col">
+                            <div class="bento-bar-track">
+                                <div class="bento-bar-fill striped" style="height: @(Math.Clamp(totalPerfiles * 20 + 25, 25, 100))%;"></div>
+                            </div>
+                            <small>Perf</small>
+                        </div>
+                        <div class="bento-bar-col">
+                            <div class="bento-bar-track">
+                                <span class="bento-bar-label">@totalEventos logs</span>
+                                <div class="bento-bar-fill solid-highlight" style="height: @(Math.Clamp(totalEventos * 5 + 45, 45, 95))%;"></div>
+                            </div>
+                            <small class="fw-bold text-dark">Audit</small>
+                        </div>
+                        <div class="bento-bar-col">
+                            <div class="bento-bar-track">
+                                <div class="bento-bar-fill striped" style="height: @(Math.Clamp(usuariosActivos * 20 + 35, 35, 100))%;"></div>
+                            </div>
+                            <small>Act</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3 Mini tarjetas inferiores -->
+                <div class="row g-2 mt-2">
+                    <div class="col-4">
+                        <a asp-controller="Empleados" asp-action="Index" class="bento-mini-stat dark text-decoration-none">
+                            <small class="d-block opacity-75">Empleados</small>
+                            <span class="fw-bold fs-5">@totalEmpleados</span>
+                        </a>
+                    </div>
+                    <div class="col-4">
+                        <a asp-controller="Usuarios" asp-action="Index" class="bento-mini-stat text-decoration-none">
+                            <small class="d-block text-muted">Usuarios</small>
+                            <span class="fw-bold fs-5 text-dark">@totalUsuarios</span>
+                        </a>
+                    </div>
+                    <div class="col-4">
+                        <a asp-controller="Auditoria" asp-action="Index" class="bento-mini-stat text-decoration-none">
+                            <small class="d-block text-muted">Eventos</small>
+                            <span class="fw-bold fs-5 text-dark">@totalEventos</span>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Tarjeta Auditoría -->
-        <div class="col-md-6 col-lg-3">
-            <div class="card h-100 shadow-sm border-0 text-center p-3">
-                <div class="card-body d-flex flex-column justify-content-between">
+    <!-- BARRA INFERIOR DE 5 INDICADORES (COMO EN LA IMAGEN DE REFERENCIA) -->
+    <div class="bento-bottom-strip mt-4 p-3 px-4">
+        <div class="row align-items-center text-center text-md-start gy-3">
+            <div class="col-6 col-md">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="strip-icon">👥</div>
                     <div>
-                        <h4 class="card-title text-primary fw-bold mb-3">📋 Auditoría</h4>
-                        <p class="card-text text-muted">Historial detallado de actividad y trazabilidad de seguridad.</p>
+                        <div class="fw-bold fs-5 text-dark lh-1">@totalEmpleados</div>
+                        <small class="text-muted">Personal Registrado</small>
                     </div>
-                    <div class="mt-3">
-                        <a asp-controller="Auditoria" asp-action="Index" class="btn btn-outline-primary w-100">Ver Registros</a>
+                </div>
+            </div>
+            <div class="col-6 col-md">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="strip-icon">🔐</div>
+                    <div>
+                        <div class="fw-bold fs-5 text-dark lh-1">@usuariosActivos</div>
+                        <small class="text-muted">Usuarios Activos</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="strip-icon">🛡️</div>
+                    <div>
+                        <div class="fw-bold fs-5 text-dark lh-1">@totalPerfiles</div>
+                        <small class="text-muted">Perfiles de Acceso</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="strip-icon">📈</div>
+                    <div>
+                        <div class="fw-bold fs-5 text-dark lh-1">@porcentaje%</div>
+                        <small class="text-muted">Salud de Seguridad</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="strip-icon">📋</div>
+                    <div>
+                        <div class="fw-bold fs-5 text-dark lh-1">@totalEventos</div>
+                        <small class="text-muted">Registros de Auditoría</small>
                     </div>
                 </div>
             </div>

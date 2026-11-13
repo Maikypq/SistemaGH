@@ -4,30 +4,42 @@
     ViewData["Title"] = "Eliminar Empleado";
 }
 
-<div class="container mt-4">
-    <h2>Eliminar Empleado</h2>
-    <hr />
+<div class="row justify-content-center py-4">
+    <div class="col-md-7 col-lg-5">
+        <div class="bento-form-card p-4 p-md-5">
+            <div class="text-center mb-4">
+                <div class="bento-avatar-box mx-auto mb-3" style="background: linear-gradient(145deg, #dc2626, #991b1b);">🗑️</div>
+                <span class="badge rounded-pill bg-danger-subtle text-danger fw-bold px-3 py-1 mb-2">Acción Permanente</span>
+                <h3 class="fw-bold text-dark mb-1">¿Eliminar Empleado?</h3>
+                <p class="text-muted small mb-0">Esta operación quedará registrada en el historial de auditoría.</p>
+            </div>
 
-    <div class="alert alert-danger">
-        <h4>¿Estás seguro de que deseas eliminar a este empleado?</h4>
-    </div>
+            <div class="bento-subcard p-3 mb-4">
+                <div class="bento-detail-item">
+                    <span class="text-muted">Nombre Completo</span>
+                    <span class="fw-bold text-dark">@Model.Nombres @Model.Apellidos</span>
+                </div>
+                <div class="bento-detail-item">
+                    <span class="text-muted">Documento</span>
+                    <span class="fw-bold text-dark">@Model.Documento</span>
+                </div>
+                <div class="bento-detail-item border-0">
+                    <span class="text-muted">Cargo</span>
+                    <span class="fw-bold text-dark">@Model.Cargo</span>
+                </div>
+            </div>
 
-    <div>
-        <dl class="row">
-            <dt class="col-sm-2">Nombre:</dt>
-            <dd class="col-sm-10">@Model.Nombres @Model.Apellidos</dd>
-
-            <dt class="col-sm-2">Documento:</dt>
-            <dd class="col-sm-10">@Model.Documento</dd>
-
-            <dt class="col-sm-2">Cargo:</dt>
-            <dd class="col-sm-10">@Model.Cargo</dd>
-        </dl>
-
-        <form asp-action="Eliminar">
-            <input type="hidden" asp-for="Id" />
-            <button type="submit" class="btn btn-danger">Sí, Eliminar</button>
-            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-        </form>
+            <form asp-action="Eliminar" method="post">
+                <input type="hidden" asp-for="Id" />
+                <div class="d-flex justify-content-between gap-3">
+                    <a asp-action="Index" class="btn btn-light rounded-pill px-4 py-2 fw-semibold border w-50">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-danger rounded-pill px-4 py-2 fw-bold w-50 shadow-sm">
+                        Confirmar Baja
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>

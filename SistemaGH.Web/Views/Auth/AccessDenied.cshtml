@@ -1,22 +1,21 @@
 @{
-    ViewData["Title"] = "Acceso Denegado";
+    ViewData["Title"] = "Acceso Restringido";
 }
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6 text-center">
-            <div class="card border-danger shadow-sm p-4">
-                <div class="card-body">
-                    <h1 class="display-4 text-danger fw-bold">403</h1>
-                    <h3 class="mb-3">Acceso Restringido</h3>
-                    <p class="text-muted mb-4">
-                        No cuentas con los permisos necesarios en tu perfil actual para acceder a este módulo o realizar esta acción.
-                    </p>
-                    <a asp-controller="Home" asp-action="Index" class="btn btn-dark px-4">
-                        Volver al Inicio
-                    </a>
-                </div>
+<div class="row justify-content-center py-5">
+    <div class="col-md-7 col-lg-5">
+        <div class="bento-form-card p-5 text-center">
+            <div class="bento-avatar-box mx-auto mb-3" style="background: linear-gradient(145deg, #dc2626, #991b1b); width: 76px; height: 76px; font-size: 2rem;">
+                🔒
             </div>
+            <span class="badge rounded-pill bg-danger-subtle text-danger fw-bold px-3 py-1 mb-2">Código 403</span>
+            <h2 class="fw-bold text-dark mb-2">Acceso Restringido</h2>
+            <p class="text-muted mb-4">
+                Tu perfil actual no cuenta con los permisos necesarios para ingresar a esta sección o ejecutar esta operación.
+            </p>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-meseta-3d rounded-pill px-5 py-2 fw-bold">
+                ← Volver al Panel Principal
+            </a>
         </div>
     </div>
 </div>

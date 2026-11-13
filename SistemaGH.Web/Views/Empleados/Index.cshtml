@@ -1,50 +1,75 @@
 @model IEnumerable<SistemaGH.Core.Entities.Empleado>
 
 @{
-    ViewData["Title"] = "Gestión de Empleados";
+    ViewData["Title"] = "Empleados";
 }
 
-<div class="container mt-4">
-    <h2>Gestión de Empleados</h2>
-    <hr />
+<div class="bento-dashboard-wrapper p-4 p-lg-5">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <span class="badge rounded-pill bg-warning text-dark fw-bold px-3 py-1 mb-2">Talento Humano</span>
+            <h1 class="bento-main-title mb-0" style="font-size: 2.3rem;">Directorio de Empleados</h1>
+        </div>
+        <a asp-action="Crear" class="btn btn-gold-solid rounded-pill px-4 py-2 fw-bold">
+            + Registrar Empleado
+        </a>
+    </div>
 
     @if (TempData["Mensaje"] != null)
     {
-        <div class="alert alert-success">@TempData["Mensaje"]</div>
+        <div class="alert alert-success rounded-4 border-0 shadow-sm mb-4">
+            ✓ @TempData["Mensaje"]
+        </div>
     }
 
-    <p>
-        <a asp-action="Crear" class="btn btn-primary">Registrar Nuevo Empleado</a>
-    </p>
-
-    <table class="table table-striped table-bordered">
-        <thead class="table-dark">
-            <tr>
-                <th>Nombres</th>
-                <th>Apellidos</th>
-                <th>Documento</th>
-                <th>Cargo</th>
-                <th>Estado</th>
-                <th class="text-center">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Nombres</td>
-                    <td>@item.Apellidos</td>
-                    <td>@item.Documento</td>
-                    <td>@item.Cargo</td>
-                    <td>
-                        <span class="badge bg-success">Activo</span>
-                    </td>
-                    <td class="text-center">
-                        <a asp-action="Editar" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Editar</a>
-                        <a asp-action="Eliminar" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Eliminar</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="bento-card p-0 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="ps-4 py-3">Colaborador</th>
+                        <th class="py-3">Documento</th>
+                        <th class="py-3">Cargo</th>
+                        <th class="py-3">Estado</th>
+                        <th class="text-end pe-4 py-3">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 py-3">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="bento-avatar-sm">
+                                        @(string.IsNullOrEmpty(item.Nombres) ? "E" : item.Nombres.Substring(0, 1).ToUpper())
+                                    </div>
+                                    <div class="fw-bold text-dark">@item.Nombres @item.Apellidos</div>
+                                </div>
+                            </td>
+                            <td class="fw-semibold text-secondary">@item.Documento</td>
+                            <td>
+                                <span class="bento-tag">@item.Cargo</span>
+                            </td>
+                            <td>
+                                @if (item.Activo)
+                                {
+                                    <span class="badge rounded-pill bg-success-subtle text-success px-3 py-2">● Activo</span>
+                                }
+                                else
+                                {
+                                    <span class="badge rounded-pill bg-danger-subtle text-danger px-3 py-2">● Inactivo</span>
+                                }
+                            </td>
+                            <td class="text-end pe-4">
+                                <div class="d-inline-flex gap-2">
+                                    <a asp-action="Editar" asp-route-id="@item.Id" class="btn btn-sm btn-outline-dark rounded-pill px-3 fw-semibold">Editar</a>
+                                    <a asp-action="Eliminar" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-semibold">Eliminar</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

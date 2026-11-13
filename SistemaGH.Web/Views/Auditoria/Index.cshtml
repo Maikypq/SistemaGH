@@ -1,36 +1,51 @@
 @model IEnumerable<SistemaGH.Core.Entities.AuditoriaLog>
 
 @{
-    ViewData["Title"] = "Auditoría del Sistema";
+    ViewData["Title"] = "Auditoría";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Logs de Auditoría y Actividad</h2>
+<div class="bento-dashboard-wrapper p-4 p-lg-5">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <span class="badge rounded-pill bg-warning text-dark fw-bold px-3 py-1 mb-2">Trazabilidad en Vivo</span>
+            <h1 class="bento-main-title mb-0" style="font-size: 2.3rem;">Historial de Auditoría</h1>
+        </div>
+        <span class="bento-filter-pill dark">Últimos @Model.Count() eventos registrados</span>
     </div>
-    <hr />
 
-    <table class="table table-striped table-hover shadow-sm">
-        <thead class="table-dark">
-            <tr>
-                <th>Fecha / Hora</th>
-                <th>Usuario</th>
-                <th>Módulo</th>
-                <th>Acción</th>
-                <th>Detalles</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var log in Model)
-            {
-                <tr>
-                    <td>@log.Fecha.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                    <td class="fw-bold">@log.Usuario</td>
-                    <td><span class="badge bg-secondary">@log.Modulo</span></td>
-                    <td>@log.Accion</td>
-                    <td>@log.Detalles</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="bento-card p-0 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="ps-4 py-3">Fecha y Hora</th>
+                        <th class="py-3">Usuario</th>
+                        <th class="py-3">Módulo</th>
+                        <th class="py-3">Acción</th>
+                        <th class="pe-4 py-3">Detalles del Evento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var log in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 py-3 text-secondary small fw-semibold">
+                                @log.Fecha.ToString("dd/MM/yyyy HH:mm:ss")
+                            </td>
+                            <td>
+                                <span class="fw-bold text-dark">👤 @log.Usuario</span>
+                            </td>
+                            <td>
+                                <span class="bento-tag active">@log.Modulo</span>
+                            </td>
+                            <td>
+                                <span class="badge rounded-pill bg-success-subtle text-success px-3 py-2">@log.Accion</span>
+                            </td>
+                            <td class="pe-4 text-secondary small">@log.Detalles</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

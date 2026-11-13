@@ -4,43 +4,75 @@
     ViewData["Title"] = "Editar Empleado";
 }
 
-<div class="container mt-4">
-    <h2>Editar Empleado</h2>
-    <hr />
+<div class="row justify-content-center py-3">
+    <div class="col-lg-8 col-xl-7">
+        <div class="bento-form-card p-4 p-md-5">
+            <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bento-avatar-box">✏️</div>
+                    <div>
+                        <span class="badge rounded-pill bg-warning text-dark fw-bold px-3 py-1 mb-1">Actualización de Ficha</span>
+                        <h3 class="fw-bold text-dark mb-0">Editar Empleado</h3>
+                    </div>
+                </div>
+                <a asp-action="Index" class="bento-mini-circle" title="Volver al listado">✕</a>
+            </div>
 
-    <div class="row">
-        <div class="col-md-6">
-            <form asp-action="Editar">
+            <form asp-action="Editar" method="post">
                 <input type="hidden" asp-for="Id" />
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-4 small"></div>
 
-                <div class="mb-3">
-                    <label asp-for="Nombres" class="form-label">Nombres</label>
-                    <input asp-for="Nombres" class="form-control" />
-                    <span asp-validation-for="Nombres" class="text-danger"></span>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label asp-for="Nombres" class="form-label fw-bold text-dark small text-uppercase">Nombres</label>
+                        <input asp-for="Nombres" class="form-control bento-field" required />
+                        <span asp-validation-for="Nombres" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Apellidos" class="form-label fw-bold text-dark small text-uppercase">Apellidos</label>
+                        <input asp-for="Apellidos" class="form-control bento-field" required />
+                        <span asp-validation-for="Apellidos" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Documento" class="form-label fw-bold text-dark small text-uppercase">Documento de Identidad</label>
+                        <input asp-for="Documento" class="form-control bento-field" required />
+                        <span asp-validation-for="Documento" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Cargo" class="form-label fw-bold text-dark small text-uppercase">Cargo / Puesto</label>
+                        <input asp-for="Cargo" class="form-control bento-field" required />
+                        <span asp-validation-for="Cargo" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="bento-subcard p-3 d-flex align-items-center justify-content-between">
+                            <div>
+                                <div class="fw-bold text-dark">Estado del Colaborador en Nómina</div>
+                                <small class="text-muted">Desmarca esta casilla si el colaborador ya no se encuentra activo.</small>
+                            </div>
+                            <div class="form-check form-switch fs-4 mb-0">
+                                <input asp-for="Activo" class="form-check-input" type="checkbox" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="Apellidos" class="form-label">Apellidos</label>
-                    <input asp-for="Apellidos" class="form-control" />
-                    <span asp-validation-for="Apellidos" class="text-danger"></span>
+                <div class="d-flex justify-content-end gap-3 mt-5 pt-3 border-top">
+                    <a asp-action="Index" class="btn btn-light rounded-pill px-4 py-2 fw-semibold border">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-meseta-3d rounded-pill px-5 py-2 fw-bold">
+                        ✓ Actualizar Datos
+                    </button>
                 </div>
-
-                <div class="mb-3">
-                    <label asp-for="Documento" class="form-label">Documento</label>
-                    <input asp-for="Documento" class="form-control" />
-                    <span asp-validation-for="Documento" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="Cargo" class="form-label">Cargo</label>
-                    <input asp-for="Cargo" class="form-control" />
-                    <span asp-validation-for="Cargo" class="text-danger"></span>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
             </form>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

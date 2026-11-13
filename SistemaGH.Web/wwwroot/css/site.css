@@ -1,31 +1,636 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+:root {
+    --meseta-green: #007a3d;
+    --meseta-emerald: #134e32;
+    --meseta-dark: #071f13;
+    --meseta-gold: #eab308;
+    --bento-card-bg: #f6f8f7;
 }
 
 body {
-  margin-bottom: 60px;
+    background: radial-gradient(circle at 18% 15%, #1d6340 0%, #0d3823 50%, #061910 100%);
+    color: #1e293b;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+/* Contenedor amplio estilo Dashboard panorámico */
+.container-bento {
+    width: 94%;
+    max-width: 1580px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+/* === NAVBAR CÁPSULA LA MESETA === */
+.navbar-lameseta {
+    background: rgba(8, 30, 19, 0.88);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(234, 179, 8, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.logo-badge-3d {
+    background: radial-gradient(circle, #ffffff 0%, #e8f3ed 100%);
+    padding: 6px 12px;
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35), inset 0 2px 2px #ffffff;
+    border: 1px solid rgba(234, 179, 8, 0.5);
+}
+
+.logo-badge-sm {
+    background: #ffffff;
+    padding: 4px 8px;
+    border-radius: 10px;
+}
+
+.logo-navbar {
+    height: 38px;
+    width: auto;
+    object-fit: contain;
+}
+
+.nav-pill-container {
+    border: 1.5px solid rgba(234, 179, 8, 0.8);
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2), 0 8px 20px rgba(0, 0, 0, 0.25);
+    gap: 6px;
+}
+
+.nav-pill-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.5rem 1.45rem !important;
+    border-radius: 50px;
+    transition: all 0.25s ease;
+}
+
+.nav-pill-link:hover {
+    color: #fff !important;
+    background: rgba(255, 255, 255, 0.16);
+}
+
+.nav-pill-link.active {
+    background: linear-gradient(180deg, #ffffff 0%, #e9f2ed 100%) !important;
+    color: var(--meseta-dark) !important;
+    font-weight: 800;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.35), inset 0 1px 1px #ffffff;
+}
+
+.user-pill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(234, 179, 8, 0.55);
+    color: #fff;
+    padding: 0.48rem 1.15rem;
+    border-radius: 50px;
+    font-size: 0.88rem;
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.2);
+}
+
+.status-dot {
+    width: 9px;
+    height: 9px;
+    background: #22c55e;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #22c55e;
+}
+
+.btn-gold-outline {
+    border: 1.5px solid var(--meseta-gold);
+    color: var(--meseta-gold);
+}
+
+.btn-gold-outline:hover {
+    background: var(--meseta-gold);
+    color: #071f13;
+}
+
+/* === TABLERO BENTO 3D PANORÁMICO === */
+.bento-dashboard-wrapper {
+    background: linear-gradient(145deg, rgba(25, 92, 59, 0.92) 0%, rgba(11, 45, 28, 0.96) 55%, rgba(7, 29, 18, 0.98) 100%);
+    border-radius: 40px;
+    padding: 2.8rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow: 0 35px 80px rgba(0, 0, 0, 0.6),
+                0 12px 25px rgba(0, 0, 0, 0.4),
+                inset 0 2px 3px rgba(255, 255, 255, 0.28);
+}
+
+.bento-main-title {
+    font-size: 3.1rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.8px;
+    text-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.bento-filter-pill {
+    text-decoration: none;
+    padding: 0.55rem 1.35rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255,255,255,0.3);
+    transition: all 0.25s ease;
+}
+
+.bento-filter-pill.active {
+    background: linear-gradient(180deg, #ffffff 0%, #e6f0eb 100%);
+    color: var(--meseta-dark);
+    font-weight: 700;
+}
+
+.bento-filter-pill.dark {
+    background: #06180f;
+    color: #ffffff;
+    border: 1px solid rgba(255,255,255,0.12);
+}
+
+.bento-filter-pill.outline {
+    border: 1.5px solid var(--meseta-gold);
+    color: var(--meseta-gold);
+}
+
+.bento-filter-pill:hover {
+    transform: translateY(-3px);
+    color: var(--meseta-gold);
+}
+
+.bento-White-circle {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #ffffff, #dfe9e3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35), inset 0 2px 3px #ffffff;
+}
+
+.bento-top-metric {
+    font-size: 2.35rem;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1;
+    text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* === TARJETAS INTERNAS CON RELIEVE 3D PROFUNDO === */
+.bento-card {
+    background: linear-gradient(165deg, #ffffff 0%, #edf3f0 100%);
+    border-radius: 30px;
+    padding: 2rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    box-shadow: 0 22px 45px -10px rgba(0, 0, 0, 0.42),
+                0 8px 18px -6px rgba(0, 0, 0, 0.25),
+                inset 0 2px 4px #ffffff,
+                inset 0 -3px 6px rgba(10, 38, 24, 0.06);
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
+}
+
+.bento-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 30px 55px -12px rgba(0, 0, 0, 0.52),
+                inset 0 2px 4px #ffffff;
+}
+
+.bento-card-dark {
+    background: radial-gradient(circle at 80% 20%, #14492f 0%, #082014 65%, #04120b 100%);
+    border-radius: 30px;
+    padding: 2rem !important;
+    border: 1px solid rgba(234, 179, 8, 0.4);
+    box-shadow: 0 22px 45px rgba(0, 0, 0, 0.5),
+                inset 0 1px 2px rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.bento-card-dark:hover {
+    transform: translateY(-6px);
+}
+
+.bento-avatar-box {
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    background: linear-gradient(145deg, #00934a, #005c2e);
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.35rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 22px rgba(0, 122, 61, 0.4), inset 0 2px 2px rgba(255,255,255,0.4);
+}
+
+.bento-avatar-sm {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #00934a, #005c2e);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 122, 61, 0.3);
+}
+
+.bento-detail-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.72rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+    font-size: 0.92rem;
+}
+
+.bento-tag {
+    text-decoration: none;
+    padding: 0.42rem 1rem;
+    border-radius: 50px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    background: #e4ece7;
+    color: #1e293b;
+    box-shadow: inset 0 1px 2px rgba(255,255,255,0.8), 0 2px 5px rgba(0,0,0,0.06);
+    transition: all 0.2s;
+}
+
+.bento-tag.active, .bento-tag:hover {
+    background: linear-gradient(145deg, #0f3823, #071c11);
+    color: #ffffff;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+.bento-subcard {
+    background: linear-gradient(145deg, #e3efe8, #d5e6dc);
+    border-radius: 20px;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.7), 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.bento-mini-circle, .bento-icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #e4ece7;
+    color: #0f172a;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-weight: 700;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08), inset 0 1px 1px #fff;
+    transition: transform 0.2s;
+}
+
+.bento-mini-circle.dark {
+    background: linear-gradient(145deg, #123e27, #071c11);
+    color: #fff;
+}
+
+.bento-mini-circle:hover {
+    transform: scale(1.1);
+}
+
+/* === MEDIDOR SEMICIRCULAR 3D === */
+.semi-gauge {
+    width: 240px;
+    height: 120px;
+    margin: 0.5rem auto;
+    position: relative;
+    overflow: hidden;
+    border-top-left-radius: 240px;
+    border-top-right-radius: 240px;
+    background: repeating-linear-gradient(90deg, rgba(0,122,61,0.2) 0px, rgba(0,122,61,0.2) 6px, transparent 6px, transparent 10px);
+    box-shadow: inset 0 6px 12px rgba(0,0,0,0.12);
+}
+
+.semi-gauge-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #007a3d 0%, #10b981 60%, #eab308 100%);
+    transform-origin: center bottom;
+    transform: rotate(calc((var(--gauge-value, 80) * 1.8deg) - 180deg));
+    transition: transform 0.8s ease-out;
+}
+
+.semi-gauge-cover {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 168px;
+    height: 84px;
+    background: linear-gradient(180deg, #ffffff 0%, #f1f6f3 100%);
+    border-top-left-radius: 170px;
+    border-top-right-radius: 170px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 6px;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+}
+
+.gauge-number {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #071f13;
+    line-height: 1;
+}
+
+.bento-target-pill {
+    background: #e7efeb;
+    border-radius: 50px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: #1e293b;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+}
+
+/* === TARJETA OSCURA Y BARRAS 3D === */
+.bento-dark-badge {
+    border: 1px solid rgba(234, 179, 8, 0.5);
+    background: rgba(234, 179, 8, 0.12);
+    color: #facc15;
+    padding: 0.35rem 0.95rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.bento-action-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-weight: 700;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.bento-action-circle.light {
+    background: radial-gradient(circle at 30% 30%, #ffffff, #d9e6df);
+    color: #071f13;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+}
+
+.bento-action-circle.outline {
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.bento-action-circle:hover {
+    transform: translateY(-3px) scale(1.08);
+}
+
+.bento-dots span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.25);
+    margin-left: 6px;
+}
+
+.bento-dots span.active {
+    background: var(--meseta-gold);
+    box-shadow: 0 0 8px var(--meseta-gold);
+}
+
+.status-dot-green {
+    width: 11px;
+    height: 11px;
+    border-radius: 4px;
+    background: var(--meseta-green);
+}
+
+.bento-bars-chart {
+    height: 215px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 14px;
+    padding-top: 24px;
+}
+
+.bento-bar-col {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.bento-bar-track {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
+}
+
+.bento-bar-fill {
+    width: 100%;
+    border-radius: 26px;
+    transition: height 0.6s ease;
+}
+
+.bento-bar-fill.striped {
+    background: repeating-linear-gradient(
+        -45deg,
+        rgba(0, 122, 61, 0.22),
+        rgba(0, 122, 61, 0.22) 6px,
+        rgba(0, 122, 61, 0.08) 6px,
+        rgba(0, 122, 61, 0.08) 12px
+    );
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.6), 0 4px 10px rgba(0,0,0,0.06);
+}
+
+.bento-bar-fill.solid-highlight {
+    background: linear-gradient(180deg, #009e4f 0%, #006834 65%, #06381e 100%);
+    box-shadow: 0 12px 24px rgba(0, 122, 61, 0.42), inset 0 2px 3px rgba(255,255,255,0.45);
+}
+
+.bento-bar-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #071f13;
+    margin-bottom: 6px;
+    white-space: nowrap;
+}
+
+.bento-mini-stat {
+    display: block;
+    background: #e6efea;
+    padding: 0.85rem 0.5rem;
+    border-radius: 18px;
+    text-align: center;
+    box-shadow: inset 0 2px 2px #ffffff, 0 4px 10px rgba(0,0,0,0.06);
+    transition: transform 0.2s;
+}
+
+.bento-mini-stat:hover {
+    transform: translateY(-3px);
+}
+
+.bento-mini-stat.dark {
+    background: linear-gradient(145deg, #103c25, #071d12);
+    color: #ffffff;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.28);
+}
+
+/* === BARRA INFERIOR DE 5 MÉTRICAS === */
+.bento-bottom-strip {
+    background: linear-gradient(180deg, #ffffff 0%, #edf3f0 100%);
+    border-radius: 26px;
+    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.35), inset 0 2px 3px #ffffff;
+}
+
+.strip-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: linear-gradient(145deg, #e1efe7, #cfe4d8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    box-shadow: 0 4px 10px rgba(0, 122, 61, 0.12), inset 0 1px 2px #fff;
+}
+
+/* === LOGIN Y FORMULARIOS 3D (EMPLEADOS, USUARIOS, PERFILES) === */
+.bento-login-card {
+    background: linear-gradient(155deg, rgba(19, 73, 46, 0.96) 0%, rgba(7, 27, 17, 0.99) 100%);
+    border-radius: 34px;
+    border: 1.5px solid rgba(234, 179, 8, 0.5);
+    box-shadow: 0 35px 70px rgba(0, 0, 0, 0.65), inset 0 2px 3px rgba(255, 255, 255, 0.22);
+}
+
+.login-logo-badge {
+    width: 96px;
+    height: 96px;
+    border-radius: 28px;
+    background: radial-gradient(circle, #ffffff 0%, #e4f0ea 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.4), inset 0 2px 4px #ffffff;
+    border: 2px solid var(--meseta-gold);
+}
+
+.bento-input {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border: 1.5px solid rgba(234, 179, 8, 0.4) !important;
+    color: #0f172a !important;
+    font-weight: 500;
+    border-radius: 14px;
+    padding: 0.75rem 1rem;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.btn-gold-solid {
+    background: linear-gradient(180deg, #facc15 0%, #eab308 60%, #ca8a04 100%);
+    color: #071c12;
+    border: none;
+    box-shadow: 0 10px 22px rgba(234, 179, 8, 0.4), inset 0 2px 2px rgba(255,255,255,0.6);
+}
+
+.btn-gold-solid:hover {
+    transform: translateY(-2px);
+    background: #fde047;
+    color: #071c12;
+}
+
+/* Tarjeta 3D para Formularios de Empleados y Usuarios */
+.bento-form-card {
+    background: linear-gradient(165deg, #ffffff 0%, #eef4f1 100%);
+    border-radius: 32px;
+    border: 1px solid #ffffff;
+    box-shadow: 0 28px 60px rgba(0, 0, 0, 0.5), inset 0 2px 4px #ffffff;
+}
+
+.bento-field {
+    background: #ffffff !important;
+    border: 1.5px solid #cbd5e1 !important;
+    border-radius: 14px !important;
+    padding: 0.75rem 1rem !important;
+    font-weight: 500;
+    color: #0f172a !important;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.04);
+    transition: all 0.2s ease;
+}
+
+.bento-field:focus {
+    border-color: var(--meseta-green) !important;
+    box-shadow: 0 0 0 4px rgba(0, 122, 61, 0.18) !important;
+}
+
+.btn-meseta-3d {
+    background: linear-gradient(180deg, #00934a 0%, #007a3d 60%, #005a2d 100%);
+    color: #ffffff !important;
+    border: 1px solid rgba(234, 179, 8, 0.5);
+    box-shadow: 0 10px 20px rgba(0, 122, 61, 0.35), inset 0 1px 2px rgba(255,255,255,0.4);
+    transition: all 0.2s ease;
+}
+
+.btn-meseta-3d:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 26px rgba(0, 122, 61, 0.45);
+}
+
+/* Protección global para vistas CRUD secundarias (Editar, Eliminar, Tablas) */
+main h1, main h2 {
+    color: #ffffff;
+    font-weight: 800;
+    text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+main .card {
+    background: linear-gradient(165deg, #ffffff 0%, #eef4f1 100%);
+    border-radius: 28px !important;
+    border: 1px solid #ffffff !important;
+    box-shadow: 0 22px 48px rgba(0, 0, 0, 0.42), inset 0 2px 3px #ffffff !important;
+    overflow: hidden;
+}
+
+main .card label, main .card .form-label, main .card h3, main .card h4 {
+    color: #0f172a;
+}
+
+main .table thead.table-dark {
+    background-color: #071f13 !important;
+}
+
+main .btn-primary {
+    background: linear-gradient(180deg, #00934a 0%, #007a3d 100%) !important;
+    border: 1px solid rgba(234, 179, 8, 0.5) !important;
+    border-radius: 50px;
+    padding: 0.5rem 1.4rem;
+    font-weight: 600;
+    box-shadow: 0 6px 14px rgba(0, 122, 61, 0.3);
+}
+
+.footer-lameseta {
+    background: rgba(6, 24, 15, 0.95);
+    border-top: 2px solid var(--meseta-gold);
 }

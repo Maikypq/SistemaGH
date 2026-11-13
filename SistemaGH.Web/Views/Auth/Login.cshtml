@@ -1,61 +1,48 @@
 @model SistemaGH.Web.Models.LoginViewModel
 @{
-    Layout = null;
-    ViewData["Title"] = "Iniciar Sesión - SistemaGH";
+    ViewData["Title"] = "Iniciar Sesión";
 }
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <style>
-        body {
-            background-color: #f4f6f9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-        .login-card {
-            width: 100%;
-            max-width: 400px;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            background: #ffffff;
-        }
-    </style>
-</head>
-<body>
-    <div class="login-card">
-        <h3 class="text-center mb-4">SistemaGH</h3>
-        <p class="text-muted text-center mb-4">Ingresa tus credenciales</p>
-
-        <form asp-action="Login" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-
-            <div class="mb-3">
-                <label asp-for="Correo" class="form-label">Correo Electrónico</label>
-                <input asp-for="Correo" class="form-control" placeholder="admin@sistemagh.com" />
-                <span asp-validation-for="Correo" class="text-danger"></span>
+<div class="row justify-content-center align-items-center w-100 m-0">
+    <div class="col-11 col-sm-9 col-md-6 col-lg-4 col-xl-3 p-0">
+        <div class="bento-login-card p-4 p-md-5">
+            <div class="text-center mb-4">
+                <div class="login-logo-badge mx-auto mb-3">
+                    <img src="~/img/Logo La Meseta.png" alt="La Meseta" class="img-fluid" style="max-height: 62px;" />
+                </div>
+                <span class="badge rounded-pill bg-warning text-dark px-3 py-1 mb-2 fw-bold shadow-sm">SistemaGH</span>
+                <h2 class="fw-bold text-white mb-1">Bienvenido</h2>
+                <p class="text-white-50 small mb-0">Compañía Cafetera La Meseta S.A.</p>
             </div>
 
-            <div class="mb-3">
-                <label asp-for="Password" class="form-label">Contraseña</label>
-                <input asp-for="Password" class="form-control" type="password" placeholder="••••••••" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
+            <form asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small rounded-3"></div>
 
-            <div class="mb-3 form-check">
-                <input asp-for="Recordarme" class="form-check-input" />
-                <label asp-for="Recordarme" class="form-check-label">Recordarme</label>
-            </div>
+                <div class="mb-3">
+                    <label asp-for="Correo" class="form-label text-white small fw-semibold">Correo Corporativo</label>
+                    <input asp-for="Correo" class="form-control bento-input" placeholder="admin@lameseta.com" />
+                    <span asp-validation-for="Correo" class="text-warning small"></span>
+                </div>
 
-            <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
-        </form>
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label text-white small fw-semibold">Contraseña</label>
+                    <input asp-for="Password" type="password" class="form-control bento-input" placeholder="••••••••" />
+                    <span asp-validation-for="Password" class="text-warning small"></span>
+                </div>
+
+                <div class="form-check mb-4">
+                    <input asp-for="Recordarme" class="form-check-input" />
+                    <label asp-for="Recordarme" class="form-check-label text-white-50 small">Mantener sesión activa</label>
+                </div>
+
+                <button type="submit" class="btn btn-gold-solid w-100 py-3 fw-bold rounded-pill">
+                    Ingresar a la Plataforma →
+                </button>
+            </form>
+        </div>
     </div>
-</body>
-</html>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
